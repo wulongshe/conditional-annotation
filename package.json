@@ -1,0 +1,50 @@
+{
+  "name": "conditional-annotation",
+  "version": "1.0.0",
+  "author": "shewulong",
+  "license": "MIT",
+  "description": "Remove the code during the compilation phase through conditional annotations, is babel plugin.",
+  "keywords": [
+    "babel",
+    "plugin",
+    "conditional",
+    "compile"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prettier": "prettier -c --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "prepublishOnly": "npm run test && npm run build",
+    "build": "tsup src/index.ts --tsconfig tsconfig.json --dts --format cjs,esm --minify --treeshake --clean",
+    "dev": "tsup src/index.ts --tsconfig tsconfig.json --format esm --treeshake --clean --watch src",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@types/babel__core": "^7.20.5",
+    "prettier": "^3.2.5",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.3",
+    "vitest": "^1.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wulongshe/conditional-annotation.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "engines": {
+    "node": ">=18.12.0"
+  },
+  "packageManager": "pnpm@9.7.1+sha512.faf344af2d6ca65c4c5c8c2224ea77a81a5e8859cbc4e06b1511ddce2f0151512431dd19e6aff31f2c6a8f5f2aced9bd2273e1fed7dd4de1868984059d2c4247"
+}
