@@ -1,5 +1,5 @@
 {
-  "name": "conditional-annotation",
+  "name": "babel-plugin-conditional-annotation",
   "version": "1.0.0",
   "author": "shewulong",
   "license": "MIT",

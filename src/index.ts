@@ -90,8 +90,8 @@ function track(path: NodePath<Node>, key: CommentKey) {
  * @notice 仅对数组、对象、代码块中的条件注释进行处理，且相关联的条件注释必须在同一层级
  * @example
  * ```ts
- * // #if START
- * console.log('start');
+ * // #if TOP_LEVEL
+ * console.log('top level');
  * // #endif
  * function func() {
  *   // #if DEBUG

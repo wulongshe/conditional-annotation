@@ -121,9 +121,9 @@ test('one node, array, has options', async () => {
 
 test('nested', async () => {
   const code = `
-// #if START
-// start
-console.log('start');
+// #if TOP_LEVEL
+// top level
+console.log('top level');
 // #endif
 function func() {
   // debug outer
@@ -143,10 +143,10 @@ function func() {
   };
 }`;
   const output = await transformAsync(code, {
-    plugins: [[ConditionalAnnotationPlugin, { START: true, DEBUG: false, MODE: 'production' }]],
+    plugins: [[ConditionalAnnotationPlugin, { TOP_LEVEL: true, DEBUG: false, MODE: 'production' }]],
   });
-  expect(output?.code).toBe(`// start
-console.log('start');
+  expect(output?.code).toBe(`// top level
+console.log('top level');
 function func() {
   // debug outer
 
