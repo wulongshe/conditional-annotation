@@ -125,6 +125,7 @@ test('nested', async () => {
 // top level
 console.log('top level');
 // #endif
+// #if FUNC
 function func() {
   // debug outer
   // #if DEBUG
@@ -141,9 +142,10 @@ function func() {
     mode: 'unknown',
     // #endif
   };
-}`;
+}
+// #endif`;
   const output = await transformAsync(code, {
-    plugins: [[ConditionalAnnotationPlugin, { TOP_LEVEL: true, DEBUG: false, MODE: 'production' }]],
+    plugins: [[ConditionalAnnotationPlugin, { TOP_LEVEL: true, FUNC: true, DEBUG: false, MODE: 'production' }]],
   });
   expect(output?.code).toBe(`// top level
 console.log('top level');
@@ -154,4 +156,22 @@ function func() {
     production: true
   };
 }`);
+});
+
+test('export default', async () => {
+  const code = `var _default_;
+  // #if animal === 'cat'
+  _default_ = new Cat();
+  // #elseif animal === 'dog'
+  _default_ = new Dog();
+  // #else
+  _default_ = new Animal();
+  // #endif
+  export default _default_;`;
+  const output = await transformAsync(code, {
+    plugins: [[ConditionalAnnotationPlugin, { debug: false, animal: 'dog' }]],
+  });
+  expect(output?.code).toBe(`var _default_;
+_default_ = new Dog();
+export default _default_;`);
 });

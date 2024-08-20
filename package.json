@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-conditional-annotation",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "shewulong",
   "license": "MIT",
   "description": "Remove the code during the compilation phase through conditional annotations, is babel plugin.",

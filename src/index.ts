@@ -84,6 +84,13 @@ function track(path: NodePath<Node>, key: CommentKey) {
   return nodes;
 }
 
+/** 验证条件注释是否合法 */
+function validate(nodes: Nodes) {
+  const start = nodes.findLastIndex((node) => node.type === '#if');
+  const end = nodes.findIndex((node) => node.type === '#endif');
+  return start === 0 && end === nodes.length - 1;
+}
+
 /**
  * @name 条件注释插件
  * @support 支持 #if、#elseif、#else、#endif 四种条件注释，支持多层嵌套
@@ -138,15 +145,13 @@ export default function (): PluginObj {
               path.node.trailingComments = void 0;
               path = path.getNextSibling();
             }
+            if (!nodes.length) return;
 
             // 删除上一个节点的尾部注释
-            if (nodes.length) {
-              const prevNode = nodes[0].path.getPrevSibling().node;
-              if (prevNode) prevNode.trailingComments = void 0;
-            }
+            const prevNode = nodes[0].path.getPrevSibling().node;
+            if (prevNode) prevNode.trailingComments = void 0;
 
-            // 条件注释不完整
-            if (nodes.length && (nodes[0].type !== '#if' || nodes[nodes.length - 1].type !== '#endif')) {
+            if (!validate(nodes)) {
               nodes.forEach((node) => node.type !== 'normal' && remove([node]));
               return;
             }
