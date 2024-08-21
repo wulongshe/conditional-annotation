@@ -38,7 +38,7 @@ test('tow node, array, no options', async () => {
   expect(output?.code).toBe(`[1, 2, 5, 6];`);
 });
 
-test('one node, array, elseif', async () => {
+test('one node, array, no options, elseif', async () => {
   const code = `[
     1,
     // #if false
@@ -54,7 +54,7 @@ test('one node, array, elseif', async () => {
   expect(output?.code).toBe(`[1, 3, 5];`);
 });
 
-test('one node, array, else', async () => {
+test('one node, array, no options, else', async () => {
   const code = `[
     // #if false
     // #elseif false
@@ -84,8 +84,9 @@ test('one node, object, no options, elseif & else', async () => {
   expect(output?.code).toBe(`({\n  a: 1,\n  c: 3,\n  e: 5\n});`);
 });
 
-test('function, object, no options', async () => {
+test('function, no options', async () => {
   const code = `function transverse(node) {
+    if (!node) return;
     // #if left
     transverse(node.left)
     // #endif
@@ -96,6 +97,7 @@ test('function, object, no options', async () => {
   }`;
   const output = await transformAsync(code, { plugins: [[ConditionalAnnotationPlugin, { left: true, right: false }]] });
   expect(output?.code).toBe(`function transverse(node) {
+  if (!node) return;
   transverse(node.left);
   console.log(node.value);
 }`);
