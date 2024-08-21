@@ -156,11 +156,23 @@ export default function (): PluginObj {
               return;
             }
 
+            let hasError = false;
             // 查找第一个成立的条件
-            const idx = nodes.findIndex((node, i) => {
+            const idx = nodes.findIndex((node) => {
               if (node.type === 'normal') return false;
-              if (calculateCondition(node.type, node.value, state.opts)) return true;
+              try {
+                if (calculateCondition(node.type, node.value, state.opts)) return true;
+              } catch (e: any) {
+                const { key, index } = node;
+                const { line, column } = node.path.node[key]![index].loc!.start;
+                console.warn(`[WARN] ${e.message} at ${state.filename}:${line}:${column}`);
+                hasError = true;
+              }
             });
+            if (hasError) {
+              nodes.forEach((node) => node.type !== 'normal' && remove([node]));
+              return;
+            }
             // 没有匹配的条件，删除所有节点
             if (idx === -1) {
               remove(nodes);

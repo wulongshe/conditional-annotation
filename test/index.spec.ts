@@ -175,3 +175,21 @@ test('export default', async () => {
 _default_ = new Dog();
 export default _default_;`);
 });
+
+test('bad case, not defined', async () => {
+  const code = `
+    // #if mode === 'development'
+    console.log('development');
+    // #endif
+  `;
+  const warnMessages: string[] = [];
+  const warn = console.warn;
+  console.warn = (message: string) => warnMessages.push(message);
+  const output = await transformAsync(code, {
+    filename: '/home/code/config.ts',
+    plugins: [[ConditionalAnnotationPlugin]],
+  });
+  console.warn = warn;
+  expect(output?.code).toBe(`console.log('development');`);
+  expect(warnMessages).toEqual([`[WARN] mode is not defined at /home/code/config.ts:2:4`]);
+});
