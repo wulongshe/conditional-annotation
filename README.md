@@ -23,6 +23,7 @@ npm i -D babel-plugin-conditional-annotation
 // top level
 console.log('top level');
 // #endif
+// #if FUNC
 function func() {
   // debug outer
   // #if DEBUG
@@ -40,6 +41,7 @@ function func() {
     // #endif
   };
 }
+// #endif
 ```
 
 ## 📄 License

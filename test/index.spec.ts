@@ -2,6 +2,16 @@ import { transformAsync } from '@babel/core';
 import { expect, test } from 'vitest';
 import ConditionalAnnotationPlugin from '../src/index';
 
+test('no node, top level', async () => {
+  const code = `
+    // #if true
+    // #endif
+    console.log('development');
+  `;
+  const output = await transformAsync(code, { plugins: [[ConditionalAnnotationPlugin]] });
+  expect(output?.code).toBe(`console.log('development');`);
+});
+
 test('no node, array, no options', async () => {
   const code = `[
     // #if false
@@ -194,4 +204,13 @@ test('bad case, not defined', async () => {
   console.warn = warn;
   expect(output?.code).toBe(`console.log('development');`);
   expect(warnMessages).toEqual([`[WARN] mode is not defined at /home/code/config.ts:2:4`]);
+});
+
+test('bad case, no end', async () => {
+  const code = `
+    // #if mode === 'development'
+    console.log('development');
+  `;
+  const output = await transformAsync(code, { plugins: [[ConditionalAnnotationPlugin]] });
+  expect(output?.code).toBe(`console.log('development');`);
 });
