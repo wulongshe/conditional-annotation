@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-conditional-annotation",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "shewulong",
   "license": "MIT",
   "description": "Remove the code during the compilation phase through conditional annotations, is babel plugin.",
@@ -11,17 +11,17 @@
     "compile"
   ],
   "type": "module",
-  "main": "dist/index.cjs",
   "module": "dist/index.js",
+  "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js",
       "types": {
-        "require": "./dist/index.d.cts",
-        "import": "./dist/index.d.ts"
-      }
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "files": [
@@ -30,8 +30,8 @@
   "scripts": {
     "prettier": "prettier -c --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "prepublishOnly": "npm run test && npm run build",
-    "build": "tsup src/index.ts --tsconfig tsconfig.json --dts --format cjs,esm --minify --treeshake --clean",
-    "dev": "tsup src/index.ts --tsconfig tsconfig.json --format esm --treeshake --clean --watch src",
+    "build": "tsup src/index.ts --dts --format cjs,esm --minify --treeshake --clean",
+    "dev": "tsup src/index.ts --format esm --treeshake --clean --watch src",
     "test": "vitest run"
   },
   "devDependencies": {
